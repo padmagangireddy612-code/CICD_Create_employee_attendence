@@ -1,14 +1,31 @@
-from attendance import calculate_attendance, check_eligibility
+from attendance import calculate_attendance, check_eligibility, calculate_absent_days
+ 
+ 
 def test_attendance_calculation():
-   assert calculate_attendance(85, 100) == 85.0
+ 
+    assert calculate_attendance(85, 100) == 85.0
+ 
+ 
 def test_eligible_employee():
-   assert check_eligibility(85) == "Eligible"
+ 
+    assert check_eligibility(85) == "Eligible"
+ 
+ 
 def test_employee_with_shortage():
-   assert check_eligibility(60) == "Shortage"
+ 
+    assert check_eligibility(60) == "Shortage"
+ 
+ 
 def test_zero_total_days():
-   try:
-       calculate_attendance(10, 0)
-   except ValueError:
-       assert True
-   else:
-       assert False
+ 
+    try:
+        calculate_attendance(10, 0)
+ 
+    except ValueError:
+        assert True
+ 
+    else:
+        assert False
+def test_absent_days_calculation():
+ 
+    assert calculate_absent_days(100, 85) == 15
