@@ -3,6 +3,8 @@ name: Employee Attendance CI
 on:
   push:
     branches: [main]
+    pull:
+     branches:[main]
  
 permissions:
   contents: read
