@@ -1,20 +1,20 @@
 
 name: Employee Attendance CI
 
-on:
+"on":
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
   contents: read
 
 jobs:
-  # Job 1: Run automated tests
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,11 +30,9 @@ jobs:
       - name: Run tests
         run: python -m pytest -v
 
-  # Job 2: Build application
   build:
     runs-on: ubuntu-latest
     needs: test
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -52,28 +50,26 @@ jobs:
         with:
           name: attendance-app
           path: dist/attendance-app.zip
- # Job 3: Build and push Docker image
- docker:
-   runs-on: ubuntu-latest
- 
-   needs: test
- 
-   steps:
-     - name: Checkout repository
-       uses: actions/checkout@v4
- 
-     - name: Set up Docker Buildx
-       uses: docker/setup-buildx-action@v3
- 
-     - name: Login to Docker Hub
-       uses: docker/login-action@v3
-       with:
-         username: ${{ secrets.DOCKERHUB_USERNAME }}
-         password: ${{ secrets.DOCKERHUB_TOKEN }}
- 
-     - name: Build and push Docker image
-       uses: docker/build-push-action@v6
-       with:
-         context: .
-         push: true
-         tags: padma612/employee-cicd-attendance:v1
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [test, build]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: padma612/employee-attendance:v1
