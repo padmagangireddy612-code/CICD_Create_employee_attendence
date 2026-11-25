@@ -73,8 +73,8 @@ jobs:
           context: .
           push: true
           tags: |
-           padma612/employee-cicd-attendance:v1
-           padma612/employee-cicd-attendance:v2
+           padma612/employee-cicd-attendance:v3
+           padma612/employee-cicd-attendance:latest
 
           # Job 4: Deploy application to Render
   deploy:
